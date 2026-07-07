@@ -53,6 +53,24 @@ export default function Home() {
     });
   }, [messages, loading]);
 
+  // Fix iOS: allinea l'altezza reale alla Visual Viewport (tastiera in/out)
+  useEffect(() => {
+    const vv = window.visualViewport;
+    if (!vv) return;
+    const setVh = () => {
+      document.documentElement.style.setProperty("--vh", `${vv.height}px`);
+    };
+    setVh();
+    vv.addEventListener("resize", setVh);
+    vv.addEventListener("scroll", setVh);
+    window.addEventListener("orientationchange", setVh);
+    return () => {
+      vv.removeEventListener("resize", setVh);
+      vv.removeEventListener("scroll", setVh);
+      window.removeEventListener("orientationchange", setVh);
+    };
+  }, []);
+
   useEffect(() => {
     const el = taRef.current;
     if (!el) return;
@@ -118,7 +136,10 @@ export default function Home() {
   const currentModeLabel = MODES.find((m) => m.id === mode)?.label ?? "";
 
   return (
-    <main className="flex flex-col h-[100dvh] mx-auto max-w-2xl w-full min-w-0 safe-x">
+    <main
+      className="flex flex-col mx-auto max-w-2xl w-full min-w-0 safe-x"
+      style={{ height: "var(--vh, 100dvh)" }}
+    >
       {/* Header */}
       <header
         className="px-4 py-3 border-b border-border flex items-center justify-between backdrop-blur-md bg-bg/60 sticky top-0 z-10"
