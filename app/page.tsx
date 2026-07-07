@@ -120,7 +120,10 @@ export default function Home() {
   return (
     <main className="flex flex-col h-[100dvh] mx-auto max-w-2xl">
       {/* Header */}
-      <header className="px-4 py-3 border-b border-border flex items-center justify-between backdrop-blur-md bg-bg/60 sticky top-0 z-10">
+      <header
+        className="px-4 py-3 border-b border-border flex items-center justify-between backdrop-blur-md bg-bg/60 sticky top-0 z-10"
+        style={{ paddingTop: "max(0.75rem, env(safe-area-inset-top))" }}
+      >
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-accent to-accent2 flex items-center justify-center text-white text-sm font-bold shadow-lg shadow-accent/20">
             ✦

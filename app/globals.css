@@ -13,9 +13,25 @@ body {
   background-image:
     radial-gradient(1000px 500px at 10% -10%, rgba(139, 92, 246, 0.15), transparent 60%),
     radial-gradient(800px 400px at 100% 0%, rgba(236, 72, 153, 0.10), transparent 60%);
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-textarea, input { -webkit-appearance: none; }
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button, a { -webkit-user-select: none; user-select: none; }
+
+textarea, input {
+  -webkit-appearance: none;
+  /* 16px minimo: previene lo zoom automatico su iOS quando si focalizza */
+  font-size: 16px;
+}
+@media (min-width: 640px) {
+  textarea, input { font-size: 14px; }
+}
 
 /* Markdown styling all'interno delle bolle assistant */
 .md h1, .md h2, .md h3 { font-weight: 600; margin: 0.6em 0 0.3em; line-height: 1.3; }
@@ -56,3 +72,7 @@ textarea, input { -webkit-appearance: none; }
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
+
+/* Hide scrollbar utility per la mode selector */
+.scrollbar-none::-webkit-scrollbar { display: none; }
+.scrollbar-none { scrollbar-width: none; }
