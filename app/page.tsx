@@ -118,7 +118,7 @@ export default function Home() {
   const currentModeLabel = MODES.find((m) => m.id === mode)?.label ?? "";
 
   return (
-    <main className="flex flex-col h-[100dvh] mx-auto max-w-2xl">
+    <main className="flex flex-col h-[100dvh] mx-auto max-w-2xl w-full min-w-0 safe-x">
       {/* Header */}
       <header
         className="px-4 py-3 border-b border-border flex items-center justify-between backdrop-blur-md bg-bg/60 sticky top-0 z-10"
@@ -274,7 +274,7 @@ export default function Home() {
             send();
           }}
         >
-          <div className="flex items-end gap-2 bg-panel border border-border rounded-2xl focus-within:border-accent/70 transition p-1.5">
+          <div className="flex items-end gap-1.5 bg-panel border border-border rounded-2xl focus-within:border-accent/70 transition p-1.5 min-w-0">
             <textarea
               ref={taRef}
               value={input}
@@ -293,15 +293,15 @@ export default function Home() {
                     ? "Descrivi l'immagine…"
                     : "Scrivi la tua idea…"
               }
-              className="flex-1 resize-none bg-transparent px-3 py-2 text-sm outline-none placeholder-white/40"
+              className="flex-1 min-w-0 resize-none bg-transparent px-2.5 py-2 text-sm outline-none placeholder-white/40"
             />
             <button
               type="submit"
               disabled={loading || !input.trim()}
               aria-label="Invia"
-              className="shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-accent to-accent2 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center transition hover:scale-105 disabled:hover:scale-100 shadow-lg shadow-accent/20"
+              className="shrink-0 w-9 h-9 rounded-xl bg-gradient-to-br from-accent to-accent2 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center transition active:scale-95 shadow-lg shadow-accent/20"
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                 <path
                   d="M5 12h14M13 6l6 6-6 6"
                   stroke="white"

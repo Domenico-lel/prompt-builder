@@ -7,6 +7,9 @@ html, body {
   background: #0a0a10;
   color: #f4f4f5;
   overscroll-behavior: none;
+  /* Guard contro qualsiasi overflow orizzontale su mobile */
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 body {
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -20,6 +23,7 @@ body {
 
 * {
   -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
 }
 
 button, a { -webkit-user-select: none; user-select: none; }
@@ -50,6 +54,7 @@ textarea, input {
   padding: 1px 5px;
   border-radius: 4px;
   font-size: 0.85em;
+  word-break: break-word;
 }
 .md pre {
   background: rgba(0,0,0,0.4);
@@ -58,6 +63,7 @@ textarea, input {
   overflow-x: auto;
   font-size: 0.85em;
   margin: 0.5em 0;
+  max-width: 100%;
 }
 .md pre code { background: transparent; padding: 0; }
 .md hr { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 0.7em 0; }
@@ -67,6 +73,7 @@ textarea, input {
   margin: 0.4em 0;
   color: rgba(255,255,255,0.75);
 }
+.md * { word-wrap: break-word; overflow-wrap: anywhere; }
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 8px; }
@@ -76,3 +83,9 @@ textarea, input {
 /* Hide scrollbar utility per la mode selector */
 .scrollbar-none::-webkit-scrollbar { display: none; }
 .scrollbar-none { scrollbar-width: none; }
+
+/* Safe area orizzontali per iPhone landscape / notch */
+.safe-x {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
