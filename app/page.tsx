@@ -305,6 +305,10 @@ export default function Home() {
           }}
         >
           <div className="flex items-end gap-1.5 bg-panel border border-border rounded-2xl focus-within:border-accent/70 transition p-1.5 min-w-0">
+            {/* Niente classe text-sm sulla textarea: su iOS un font < 16px
+                provoca l'auto-zoom al focus (e rompe il layout). La
+                dimensione è gestita in globals.css: 16px su mobile, 14px
+                da >=640px. */}
             <textarea
               ref={taRef}
               value={input}
@@ -323,7 +327,7 @@ export default function Home() {
                     ? "Descrivi l'immagine…"
                     : "Scrivi la tua idea…"
               }
-              className="flex-1 min-w-0 resize-none bg-transparent px-2.5 py-2 text-sm outline-none placeholder-white/40"
+              className="flex-1 min-w-0 resize-none bg-transparent px-2.5 py-2 outline-none placeholder-white/40"
             />
             <button
               type="submit"
