@@ -53,21 +53,27 @@ export default function Home() {
     });
   }, [messages, loading]);
 
-  // Fix iOS: allinea l'altezza reale alla Visual Viewport (tastiera in/out)
+  // Fix iOS/PWA: ancora l'app alla Visual Viewport. Il documento è bloccato
+  // (vedi globals.css), quindi la tastiera non trascina più la pagina: qui
+  // adeguiamo altezza e offset dell'app all'area realmente visibile.
   useEffect(() => {
     const vv = window.visualViewport;
     if (!vv) return;
-    const setVh = () => {
-      document.documentElement.style.setProperty("--vh", `${vv.height}px`);
+    const root = document.documentElement.style;
+    const sync = () => {
+      root.setProperty("--vh", `${vv.height}px`);
+      // Se iOS applica comunque un offset alla viewport visiva, lo
+      // compensiamo traslando l'app per tenerla incollata al visibile.
+      root.setProperty("--vv-offset", `${vv.offsetTop}px`);
     };
-    setVh();
-    vv.addEventListener("resize", setVh);
-    vv.addEventListener("scroll", setVh);
-    window.addEventListener("orientationchange", setVh);
+    sync();
+    vv.addEventListener("resize", sync);
+    vv.addEventListener("scroll", sync);
+    window.addEventListener("orientationchange", sync);
     return () => {
-      vv.removeEventListener("resize", setVh);
-      vv.removeEventListener("scroll", setVh);
-      window.removeEventListener("orientationchange", setVh);
+      vv.removeEventListener("resize", sync);
+      vv.removeEventListener("scroll", sync);
+      window.removeEventListener("orientationchange", sync);
     };
   }, []);
 
@@ -138,7 +144,10 @@ export default function Home() {
   return (
     <main
       className="flex flex-col mx-auto max-w-2xl w-full min-w-0 safe-x"
-      style={{ height: "var(--vh, 100dvh)" }}
+      style={{
+        height: "var(--vh, 100dvh)",
+        transform: "translateY(var(--vv-offset, 0px))",
+      }}
     >
       {/* Header */}
       <header
