@@ -26,6 +26,36 @@ const result = {
   checks: ["Ogni settimana contiene una verifica."],
 };
 
+test("a mini-prompt can start without completing a structured brief", () => {
+  const input = parseRequest({
+    action: "start",
+    brief: { goal: "Voglio un piano di studio" },
+  });
+  assert.equal(input.action, "start");
+  assert.equal(input.brief.goal, "Voglio un piano di studio");
+  assert.equal(input.brief.context, "");
+});
+
+test("start returns either a ready prompt or up to three questions", () => {
+  assert.equal(parseResult(result, "start").prompt, result.prompt);
+  const questions = {
+    ...result,
+    prompt: "",
+    questions: ["Quale materia vuoi studiare?"],
+  };
+  assert.deepEqual(
+    parseResult(questions, "start").questions,
+    questions.questions,
+  );
+  assert.throws(() => parseResult({ ...result, prompt: "" }, "start"));
+  assert.throws(() =>
+    parseResult({ ...result, questions: ["Quale materia?"] }, "start"),
+  );
+  assert.throws(() =>
+    parseResult({ ...questions, questions: ["A", "B", "C", "D"] }, "start"),
+  );
+});
+
 test("normalizes the brief and preserves the legacy prompt input", () => {
   assert.equal(
     parseRequest({ brief: { ...brief, goal: "  Studiare  " } }).brief.goal,
@@ -128,7 +158,7 @@ test("API configuration, analyze/build/refine, truncation and errors", async () 
     assert.equal((await POST(request({ brief }))).status, 503);
     process.env.GROQ_API_KEY = "test-key-never-transmitted";
     process.env.GROQ_MODEL = "test-configurable-model";
-    for (const action of ["analyze", "build", "refine"]) {
+    for (const action of ["start", "analyze", "build", "refine"]) {
       state.response = {
         choices: [
           {
