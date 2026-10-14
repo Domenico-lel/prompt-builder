@@ -8,8 +8,8 @@
   box-sizing: border-box;
 }
 html {
-  background: #101411;
-  color: #ecf1eb;
+  background: #0a0a10;
+  color: #f4f4f5;
 }
 body {
   margin: 0;
@@ -20,6 +20,17 @@ body {
     "Segoe UI",
     sans-serif;
   -webkit-font-smoothing: antialiased;
+  background-image:
+    radial-gradient(
+      1000px 500px at 10% -10%,
+      rgba(139, 92, 246, 0.15),
+      transparent 60%
+    ),
+    radial-gradient(
+      800px 400px at 100% 0%,
+      rgba(236, 72, 153, 0.1),
+      transparent 60%
+    );
 }
 button,
 input,
@@ -32,32 +43,32 @@ select {
   cursor: pointer;
 }
 button {
-  border: 1px solid #354039;
-  background: #1c251f;
-  color: #e1e9df;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #1c1c26;
+  color: #e4e4ec;
   padding: 10px 15px;
   border-radius: 9px;
   font-size: 13px;
   transition: background 0.15s;
 }
 button:hover:not(:disabled) {
-  background: #2d3b31;
+  background: #292938;
 }
 button:disabled {
   opacity: 0.45;
   cursor: not-allowed;
 }
 button.primary {
-  background: #c1ef91;
-  color: #182414;
-  border-color: #c1ef91;
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  color: #ffffff;
+  border-color: #b89aff;
   font-weight: 650;
 }
 button.primary:hover:not(:disabled) {
-  background: #d1f9a6;
+  background: linear-gradient(135deg, #9b6cf9, #f05eaa);
 }
 :focus-visible {
-  outline: 2px solid #c1ef91;
+  outline: 2px solid #b89aff;
   outline-offset: 3px;
 }
 a {
@@ -75,7 +86,7 @@ a {
   gap: 16px;
   align-items: center;
   padding: 25px 0;
-  border-bottom: 1px solid #2a352c;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 .brand {
   display: flex;
@@ -84,8 +95,8 @@ a {
   font-weight: 700;
 }
 .brand-icon {
-  background: #c1ef91;
-  color: #192314;
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  color: #ffffff;
   padding: 6px 12px;
   border-radius: 10px;
   font-size: 23px;
@@ -94,10 +105,10 @@ a {
 .eyebrow {
   font-size: 10px;
   letter-spacing: 0.16em;
-  color: #aac198;
+  color: #c4a9ff;
 }
 .badge {
-  border: 1px solid #354039;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 5px;
   padding: 5px 7px;
   font-weight: 500;
@@ -114,7 +125,7 @@ a {
 }
 .intro > p:last-child {
   max-width: 630px;
-  color: #aab6ac;
+  color: #aaaabd;
   line-height: 1.65;
   font-size: 15px;
 }
@@ -125,8 +136,8 @@ a {
   align-items: start;
 }
 .panel {
-  background: #171e19;
-  border: 1px solid #303b32;
+  background: #15151d;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
   padding: 26px;
   min-width: 0;
@@ -139,8 +150,8 @@ a {
 }
 .step {
   font-size: 11px;
-  border: 1px solid #4a5a42;
-  color: #c1ef91;
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  color: #b89aff;
   border-radius: 7px;
   padding: 7px;
 }
@@ -151,7 +162,7 @@ h2 {
   letter-spacing: -0.02em;
 }
 .section-heading p {
-  color: #aab6ac;
+  color: #aaaabd;
   font-size: 12px;
   margin: 0;
   line-height: 1.6;
@@ -183,25 +194,25 @@ h3 {
 label {
   display: block;
   font-size: 12px;
-  color: #d5dfd3;
+  color: #dddde8;
   line-height: 1.6;
 }
 .full {
   grid-column: 1 / -1;
 }
 .optional {
-  color: #99a898;
+  color: #9898ae;
   font-size: 10px;
 }
 .required {
-  color: #c1ef91;
+  color: #b89aff;
 }
 textarea {
   display: block;
   width: 100%;
-  background: #101612;
-  color: #eff5ed;
-  border: 1px solid #354137;
+  background: #0e0e16;
+  color: #f4f4f5;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 9px;
   padding: 12px;
   margin-top: 7px;
@@ -211,7 +222,7 @@ textarea {
   min-height: 70px;
 }
 textarea::placeholder {
-  color: #849284;
+  color: #86869d;
 }
 .actions {
   display: flex;
@@ -220,7 +231,7 @@ textarea::placeholder {
   margin-top: 22px;
 }
 .footnote {
-  color: #9ba998;
+  color: #a0a0b5;
   font-size: 11px;
   line-height: 1.65;
   margin-top: 12px;
@@ -228,7 +239,7 @@ textarea::placeholder {
 .clarifications,
 .refinement,
 .notes {
-  border-top: 1px solid #303b32;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   margin-top: 24px;
   padding-top: 22px;
 }
@@ -245,8 +256,8 @@ textarea::placeholder {
   align-items: center;
   width: 56px;
   height: 56px;
-  background: #253420;
-  color: #c1ef91;
+  background: rgba(139, 92, 246, 0.15);
+  color: #b89aff;
   border-radius: 16px;
   font-size: 30px;
   margin-bottom: 24px;
@@ -255,7 +266,7 @@ textarea::placeholder {
   font-size: 19px;
 }
 .empty-output p {
-  color: #9ba998;
+  color: #a0a0b5;
   max-width: 290px;
   font-size: 14px;
   line-height: 1.7;
@@ -269,9 +280,9 @@ textarea::placeholder {
   margin-top: 26px;
 }
 .empty-tags span {
-  border: 1px dashed #3b493c;
+  border: 1px dashed rgba(139, 92, 246, 0.3);
   border-radius: 7px;
-  color: #9ba998;
+  color: #a0a0b5;
   padding: 6px 9px;
   font-size: 11px;
 }
@@ -293,10 +304,10 @@ textarea::placeholder {
 }
 select {
   display: block;
-  background: #101612;
-  color: #dbe6d6;
+  background: #0e0e16;
+  color: #e3ddf0;
   max-width: 190px;
-  border: 1px solid #354137;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 6px;
   padding: 7px;
   font-size: 11px;
@@ -312,13 +323,13 @@ select {
   padding: 8px 10px;
 }
 .editor-tabs button[aria-pressed="true"] {
-  background: #304029;
-  color: #c1ef91;
+  background: rgba(139, 92, 246, 0.2);
+  color: #b89aff;
 }
 .editor-tabs span {
   margin-left: auto;
   font-size: 10px;
-  color: #9ba998;
+  color: #a0a0b5;
 }
 .prompt-editor,
 .prompt-preview {
@@ -327,8 +338,8 @@ select {
   min-height: 220px;
   overflow-y: auto;
   padding: 18px;
-  background: #101612;
-  border: 1px solid #354137;
+  background: #0e0e16;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 10px;
 }
 .prompt-editor {
@@ -342,11 +353,11 @@ select {
   list-style: disc;
   margin-left: 18px;
   font-size: 12px;
-  color: #b7c5b0;
+  color: #c1b9d0;
   line-height: 1.8;
 }
 .feedback {
-  color: #c1ef91;
+  color: #b89aff;
   font-size: 13px;
 }
 .feedback p {
@@ -374,13 +385,13 @@ select {
 }
 .library article {
   padding: 20px;
-  background: #171e19;
-  border: 1px solid #303b32;
+  background: #15151d;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
   min-width: 0;
 }
 .library article p {
-  color: #9ba998;
+  color: #a0a0b5;
   font-size: 12px;
   overflow-wrap: anywhere;
   display: -webkit-box;
@@ -389,10 +400,10 @@ select {
   overflow: hidden;
 }
 footer {
-  color: #9ba998;
+  color: #a0a0b5;
   font-size: 11px;
   padding: 24px 0 32px;
-  border-top: 1px solid #303b32;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   line-height: 1.7;
 }
 .md {
@@ -420,18 +431,18 @@ footer {
   padding-left: 22px;
 }
 .md code {
-  background: #2b372b;
+  background: #292336;
   padding: 2px 4px;
   border-radius: 4px;
 }
 .md pre {
   overflow-x: auto;
   padding: 12px;
-  background: #222c23;
+  background: #1c1c26;
 }
 .md a {
   text-decoration: underline;
-  color: #c1ef91;
+  color: #b89aff;
 }
 .md table {
   display: block;
@@ -439,7 +450,7 @@ footer {
 }
 .md td,
 .md th {
-  border: 1px solid #354137;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   padding: 7px;
 }
 @media (max-width: 950px) {
