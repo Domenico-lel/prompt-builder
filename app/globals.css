@@ -505,3 +505,172 @@ footer {
     transition: none !important;
   }
 }
+/* Mini-prompt conversation: one idea, optional questions, complete prompt. */
+.mini-intro {
+  text-align: center;
+  padding: 48px 0 30px;
+}
+.mini-intro > p:last-child {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 560px;
+}
+.conversation-workspace {
+  max-width: 820px;
+  margin: 0 auto;
+  display: grid;
+  gap: 22px;
+}
+.idea-panel {
+  padding: 28px;
+}
+.idea-panel > form > label {
+  font-size: 15px;
+  font-weight: 600;
+}
+textarea.mini-prompt {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 14px 0;
+  margin-top: 8px;
+  min-height: 132px;
+  font-size: 17px;
+  line-height: 1.7;
+  resize: vertical;
+}
+textarea.mini-prompt:focus-visible {
+  outline-offset: 6px;
+  border-radius: 6px;
+}
+.mini-submit {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.mini-submit > span {
+  color: #a0a0b5;
+  font-size: 12px;
+}
+.mini-submit button {
+  white-space: nowrap;
+  padding: 12px 18px;
+}
+.idea-examples {
+  margin-top: 26px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.idea-examples > p {
+  font-size: 11px;
+  color: #a0a0b5;
+  margin-bottom: 12px;
+}
+.idea-examples > button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  padding: 10px 0;
+  color: #cbc4db;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.idea-examples > button:hover:not(:disabled) {
+  color: #c4a9ff;
+  background: transparent;
+}
+.idea-examples > button > span {
+  color: #b89aff;
+}
+.assistant-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+.assistant-heading p {
+  font-size: 12px;
+  color: #aaaabd;
+  line-height: 1.6;
+}
+.assistant-icon {
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  border-radius: 12px;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+.question-fields {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 20px;
+}
+.question-fields label {
+  font-size: 14px;
+}
+.question-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 21px;
+  height: 21px;
+  border-radius: 6px;
+  background: rgba(139, 92, 246, 0.2);
+  color: #c4a9ff;
+  font-size: 11px;
+  margin-right: 8px;
+}
+.feedback,
+.error,
+.library {
+  max-width: 820px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.library .section-heading {
+  margin-bottom: 16px;
+}
+@media (max-width: 600px) {
+  .mini-intro {
+    padding: 34px 0 24px;
+  }
+  .mini-intro h1 {
+    font-size: 34px;
+  }
+  .mini-intro .eyebrow {
+    font-size: 9px;
+  }
+  .idea-panel {
+    padding: 22px 18px;
+  }
+  .mini-submit {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .mini-submit > span {
+    font-size: 11px;
+  }
+  .mini-submit button {
+    width: 100%;
+  }
+  .assistant-heading {
+    align-items: flex-start;
+  }
+  .assistant-heading h2 {
+    font-size: 17px;
+  }
+}

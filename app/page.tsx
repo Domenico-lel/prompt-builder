@@ -7,65 +7,14 @@ import {
   Brief,
   BuilderResult,
   EMPTY_BRIEF,
-  FIELDS,
   parseRequest,
   parseResult,
 } from "@/lib/builder";
 
-const LABELS: Record<keyof Brief, string> = {
-  goal: "Cosa vuoi ottenere?",
-  context: "Contesto e informazioni disponibili",
-  audience: "A chi è destinato il risultato?",
-  constraints: "Requisiti e limiti",
-  format: "Formato del risultato",
-  tone: "Tono e stile",
-};
-const HINTS: Record<keyof Brief, string> = {
-  goal: "Descrivi il risultato che vuoi ottenere dall’AI…",
-  context:
-    "Situazione, materiali, dati o informazioni che l’AI dovrà conoscere…",
-  audience: "Es. clienti di una piccola impresa, studenti principianti…",
-  constraints: "Es. massimo 500 parole, budget noto, cose da evitare…",
-  format: "Es. tabella comparativa, email, piano settimanale…",
-  tone: "Es. chiaro, professionale, semplice e diretto…",
-};
-const TEMPLATES = [
-  {
-    name: "Scrittura",
-    goal: "Scrivere un’email di follow-up dopo una proposta commerciale",
-    format: "Email con oggetto e una call to action",
-    tone: "Professionale e cordiale",
-  },
-  {
-    name: "Studio",
-    goal: "Costruire un piano di studio per imparare una materia",
-    format: "Piano settimanale con esercizi e verifiche",
-    tone: "Chiaro e incoraggiante",
-  },
-  {
-    name: "Ricerca",
-    goal: "Confrontare le alternative per prendere una decisione informata",
-    format: "Tabella comparativa e raccomandazione motivata",
-    tone: "Analitico",
-  },
-  {
-    name: "Analisi",
-    goal: "Analizzare un insieme di dati e individuare tendenze e anomalie",
-    format: "Sintesi, evidenze e limiti dell’analisi",
-    tone: "Preciso",
-  },
-  {
-    name: "Lavoro",
-    goal: "Preparare una riunione con obiettivi, agenda e decisioni da prendere",
-    format: "Agenda con tempi e risultati attesi",
-    tone: "Pratico",
-  },
-  {
-    name: "Pianificazione",
-    goal: "Trasformare un obiettivo in un piano di azioni realizzabili",
-    format: "Fasi, priorità, dipendenze e criteri di completamento",
-    tone: "Concreto",
-  },
+const EXAMPLES = [
+  "Mi serve un piano per studiare storia in un mese",
+  "Voglio scrivere un’email per proporre una collaborazione",
+  "Aiutami a confrontare due idee per un progetto",
 ];
 type Version = BuilderResult & { id: string; model: string; createdAt: string };
 type Project = { id: string; brief: Brief; versions: Version[]; draft: string };
@@ -121,8 +70,8 @@ export default function Home() {
     return () => request.current?.abort();
   }, []);
 
-  function changeBrief(key: keyof Brief, value: string) {
-    setBrief((current) => ({ ...current, [key]: value }));
+  function changeIdea(value: string) {
+    setBrief({ ...EMPTY_BRIEF, goal: value });
     setAnalysis(null);
     setAnswers({});
     setNotice("");
@@ -155,10 +104,14 @@ export default function Home() {
       if (!response.ok)
         throw new Error(data.error || "Il servizio AI non ha risposto.");
       const parsed = parseResult(data, action);
-      if (action === "analyze") {
+      if (
+        parsed.questions.length > 0 &&
+        (action === "start" || action === "analyze")
+      ) {
         setAnalysis(parsed);
         setAnswers({});
       } else {
+        setAnalysis(null);
         const version = {
           ...parsed,
           id: crypto.randomUUID(),
@@ -169,7 +122,7 @@ export default function Home() {
         setActive(version.id);
         setDraft(parsed.prompt);
         setInstruction("");
-        setPreview(false);
+        setPreview(true);
       }
     } catch (err) {
       setError(
@@ -239,114 +192,102 @@ export default function Home() {
       <header className="topbar">
         <a href="/" className="brand">
           <span className="brand-icon">✦</span> Prompt Builder{" "}
-          <span className="badge">WORKSPACE</span>
+          <span className="badge">DALL’IDEA AL PROMPT</span>
         </a>
         <button disabled={!!loading} onClick={reset}>
           Nuovo progetto
         </button>
       </header>
-      <section className="intro">
-        <p className="eyebrow">DALL’IDEA ALLE ISTRUZIONI</p>
+      <section className="intro mini-intro">
+        <p className="eyebrow">TU HAI L’IDEA. AI DETTAGLI PENSA L’AI.</p>
         <h1>
-          Un buon risultato inizia
+          Scrivi poco.
           <br />
-          da un prompt chiaro.
+          Ottieni un prompt fatto bene.
         </h1>
         <p>
-          Definisci ciò che vuoi ottenere. Chiarisci i dettagli. Costruisci e
-          perfeziona le istruzioni per la tua AI.
+          Racconta in poche parole cosa ti serve. Se manca qualcosa di
+          importante, ti faccio qualche domanda. Poi preparo il prompt completo.
         </p>
       </section>
-      <div className="workspace-grid">
-        <section className="panel brief-panel" aria-labelledby="brief-title">
-          <div className="section-heading">
-            <span className="step">01</span>
-            <div>
-              <h2 id="brief-title">Definisci il brief</h2>
-              <p>Parti da zero o scegli un punto di partenza.</p>
-            </div>
-          </div>
-          <div className="templates">
-            {TEMPLATES.map((template) => (
+      <div className="conversation-workspace">
+        <section className="panel idea-panel" aria-labelledby="idea-title">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              generate("start");
+            }}
+          >
+            <label id="idea-title" htmlFor="mini-prompt">
+              Di cosa hai bisogno?
+            </label>
+            <textarea
+              id="mini-prompt"
+              className="mini-prompt"
+              disabled={!!loading}
+              rows={4}
+              maxLength={4000}
+              value={brief.goal}
+              onChange={(e) => changeIdea(e.target.value)}
+              placeholder="Es. Mi serve un prompt per creare un piano di allenamento a casa, ho poco tempo e voglio rimettermi in forma…"
+              required
+            />
+            <div className="mini-submit">
+              <span>Bastano un paio di frasi, anche scritte al volo.</span>
               <button
-                key={template.name}
-                disabled={!!loading}
-                onClick={() => {
-                  setBrief({
-                    ...EMPTY_BRIEF,
-                    goal: template.goal,
-                    format: template.format,
-                    tone: template.tone,
-                  });
-                  setAnalysis(null);
-                  setAnswers({});
-                  setNotice("");
-                }}
+                type="submit"
+                className="primary"
+                disabled={!!loading || !brief.goal.trim()}
               >
-                {template.name}
+                {loading === "start" ? "Ci penso…" : "Invia la tua idea ↗"}
               </button>
-            ))}
-          </div>
-          <fieldset disabled={!!loading} className="brief-fields">
-            {FIELDS.map((key) => (
-              <label
-                key={key}
-                className={
-                  key === "goal" ||
-                  key === "context" ||
-                  key === "audience" ||
-                  key === "constraints"
-                    ? "full"
-                    : ""
-                }
-              >
-                {LABELS[key]}
-                {key === "goal" ? (
-                  <span className="required"> *</span>
-                ) : (
-                  <span className="optional"> · facoltativo</span>
-                )}
-                <textarea
-                  rows={key === "goal" || key === "context" ? 3 : 2}
-                  maxLength={key === "context" ? 10000 : 4000}
-                  value={brief[key]}
-                  onChange={(e) => changeBrief(key, e.target.value)}
-                  placeholder={HINTS[key]}
-                  required={key === "goal"}
-                />
-              </label>
-            ))}
-          </fieldset>
-          <div className="actions">
-            <button
-              disabled={!!loading || !brief.goal.trim()}
-              onClick={() => generate("analyze")}
+            </div>
+          </form>
+          {!result && !analysis && (
+            <div className="idea-examples">
+              <p>Oppure parti da un esempio</p>
+              {EXAMPLES.map((example) => (
+                <button
+                  key={example}
+                  disabled={!!loading}
+                  onClick={() => {
+                    changeIdea(example);
+                    document.getElementById("mini-prompt")?.focus();
+                  }}
+                >
+                  {example}
+                  <span aria-hidden="true">↗</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </section>
+        {analysis && (
+          <section
+            className="panel questions-panel"
+            aria-labelledby="questions-title"
+          >
+            <div className="assistant-heading">
+              <span className="assistant-icon" aria-hidden="true">
+                ✦
+              </span>
+              <div>
+                <h2 id="questions-title">Mi servono solo questi dettagli</h2>
+                <p>Rispondi come preferisci, anche in poche parole.</p>
+              </div>
+            </div>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                generate("build");
+              }}
             >
-              Chiarisci con l’AI
-            </button>
-            <button
-              className="primary"
-              disabled={!!loading || !brief.goal.trim()}
-              onClick={() => generate("build")}
-            >
-              Costruisci prompt ↗
-            </button>
-          </div>
-          <p className="footnote">
-            Puoi generare subito: i dettagli mancanti diventano segnaposto da
-            completare.
-          </p>
-          {analysis && (
-            <section className="clarifications">
-              <h3>Mettiamo a fuoco i dettagli</h3>
-              {analysis.questions.length === 0 ? (
-                <p>Il brief è sufficiente per costruire il prompt.</p>
-              ) : (
-                analysis.questions.map((question) => (
+              <fieldset disabled={!!loading} className="question-fields">
+                {analysis.questions.map((question, index) => (
                   <label key={question}>
+                    <span className="question-number">{index + 1}</span>
                     {question}
                     <textarea
-                      disabled={!!loading}
                       rows={2}
                       maxLength={2000}
                       value={answers[question] || ""}
@@ -356,180 +297,184 @@ export default function Home() {
                           [question]: e.target.value,
                         }))
                       }
-                      placeholder="Rispondi oppure lascia un segnaposto…"
+                      placeholder="La tua risposta…"
                     />
                   </label>
-                ))
-              )}
+                ))}
+              </fieldset>
+              <div className="actions">
+                <button type="submit" className="primary" disabled={!!loading}>
+                  Crea il prompt completo ↗
+                </button>
+              </div>
               <p className="footnote">
-                Le risposte saranno incluse nella prossima generazione.
+                Puoi lasciare una risposta in bianco: userò un segnaposto solo
+                dove è indispensabile.
               </p>
-            </section>
-          )}
-        </section>
-        <section className="panel output-panel" aria-labelledby="output-title">
-          <div className="section-heading">
-            <span className="step">02</span>
-            <div>
-              <h2 id="output-title">Il tuo prompt</h2>
-              <p>Un documento da usare, modificare e migliorare.</p>
+            </form>
+          </section>
+        )}
+        {result && !analysis && (
+          <section
+            className="panel output-panel"
+            aria-labelledby="output-title"
+          >
+            <div className="section-heading">
+              <span className="assistant-icon" aria-hidden="true">
+                ✦
+              </span>
+              <div>
+                <h2 id="output-title">Il tuo prompt</h2>
+                <p>
+                  Pronto da copiare nella tua AI. Puoi anche modificarlo o
+                  chiedere una revisione.
+                </p>
+              </div>
             </div>
-          </div>
-          {result ? (
-            <>
-              <div className="output-heading">
-                <h3>{result.title}</h3>
-                <label className="version-picker">
-                  Versione
-                  <select
+            {result && (
+              <>
+                <div className="output-heading">
+                  <h3>{result.title}</h3>
+                  <label className="version-picker">
+                    Versione
+                    <select
+                      disabled={!!loading}
+                      value={active}
+                      onChange={(e) => {
+                        const version = versions.find(
+                          (item) => item.id === e.target.value,
+                        )!;
+                        setActive(version.id);
+                        setDraft(version.prompt);
+                        setPreview(false);
+                        setNotice("");
+                      }}
+                    >
+                      {versions.map((version, index) => (
+                        <option value={version.id} key={version.id}>
+                          {index + 1} · {version.title}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
+                <div className="editor-tabs">
+                  <button
+                    aria-pressed={!preview}
+                    onClick={() => setPreview(false)}
+                  >
+                    Modifica
+                  </button>
+                  <button
+                    aria-pressed={preview}
+                    onClick={() => setPreview(true)}
+                  >
+                    Anteprima
+                  </button>
+                  <span>{draft.length.toLocaleString("it-IT")} caratteri</span>
+                </div>
+                {preview ? (
+                  <div className="md prompt-preview">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {draft}
+                    </ReactMarkdown>
+                  </div>
+                ) : (
+                  <textarea
+                    className="prompt-editor"
+                    aria-label="Prompt modificabile"
                     disabled={!!loading}
-                    value={active}
+                    maxLength={16000}
+                    value={draft}
                     onChange={(e) => {
-                      const version = versions.find(
-                        (item) => item.id === e.target.value,
-                      )!;
-                      setActive(version.id);
-                      setDraft(version.prompt);
-                      setPreview(false);
+                      setDraft(e.target.value);
                       setNotice("");
                     }}
-                  >
-                    {versions.map((version, index) => (
-                      <option value={version.id} key={version.id}>
-                        {index + 1} · {version.title}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              </div>
-              <div className="editor-tabs">
-                <button
-                  aria-pressed={!preview}
-                  onClick={() => setPreview(false)}
-                >
-                  Modifica
-                </button>
-                <button aria-pressed={preview} onClick={() => setPreview(true)}>
-                  Anteprima
-                </button>
-                <span>{draft.length.toLocaleString("it-IT")} caratteri</span>
-              </div>
-              {preview ? (
-                <div className="md prompt-preview">
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                    {draft}
-                  </ReactMarkdown>
-                </div>
-              ) : (
-                <textarea
-                  className="prompt-editor"
-                  aria-label="Prompt modificabile"
-                  disabled={!!loading}
-                  maxLength={16000}
-                  value={draft}
-                  onChange={(e) => {
-                    setDraft(e.target.value);
-                    setNotice("");
-                  }}
-                />
-              )}
-              <div className="actions output-actions">
-                <button
-                  disabled={!draft.trim()}
-                  onClick={async () => {
-                    try {
-                      await navigator.clipboard.writeText(draft);
-                      setNotice("Prompt copiato.");
-                    } catch {
-                      setError(
-                        "Copia non disponibile. Seleziona il testo nell’editor.",
-                      );
-                    }
-                  }}
-                >
-                  Copia
-                </button>
-                <button disabled={!draft.trim()} onClick={download}>
-                  Esporta .md
-                </button>
-                <button disabled={!!loading || !draft.trim()} onClick={save}>
-                  Salva in libreria
-                </button>
-              </div>
-              <div className="refinement">
-                <label>
-                  Come vuoi migliorarlo?
-                  <textarea
-                    disabled={!!loading}
-                    rows={2}
-                    maxLength={4000}
-                    value={instruction}
-                    onChange={(e) => setInstruction(e.target.value)}
-                    placeholder="Es. rendilo più sintetico, aggiungi un esempio, cambia il destinatario…"
                   />
-                </label>
-                <button
-                  className="primary"
-                  disabled={!!loading || !instruction.trim() || !draft.trim()}
-                  onClick={() => generate("refine")}
-                >
-                  Crea una revisione
-                </button>
-              </div>
-              {result.assumptions.length > 0 && (
-                <div className="notes">
-                  <h3>Assunzioni da verificare</h3>
-                  <ul>
-                    {result.assumptions.map((item, index) => (
-                      <li key={index}>{item}</li>
-                    ))}
-                  </ul>
+                )}
+                <div className="actions output-actions">
+                  <button
+                    disabled={!draft.trim()}
+                    onClick={async () => {
+                      try {
+                        await navigator.clipboard.writeText(draft);
+                        setNotice("Prompt copiato.");
+                      } catch {
+                        setError(
+                          "Copia non disponibile. Seleziona il testo nell’editor.",
+                        );
+                      }
+                    }}
+                  >
+                    Copia
+                  </button>
+                  <button disabled={!draft.trim()} onClick={download}>
+                    Esporta .md
+                  </button>
+                  <button disabled={!!loading || !draft.trim()} onClick={save}>
+                    Salva in libreria
+                  </button>
                 </div>
-              )}
-              {result.checks.length > 0 && (
-                <div className="notes">
-                  <h3>Criteri per valutare il risultato</h3>
-                  <p className="footnote">
-                    Suggeriti dall’AI; il prompt non è stato eseguito o
-                    validato.
-                  </p>
-                  <ul>
-                    {result.checks.map((item, index) => (
-                      <li key={index}>{item}</li>
-                    ))}
-                  </ul>
+                <div className="refinement">
+                  <label>
+                    Come vuoi migliorarlo?
+                    <textarea
+                      disabled={!!loading}
+                      rows={2}
+                      maxLength={4000}
+                      value={instruction}
+                      onChange={(e) => setInstruction(e.target.value)}
+                      placeholder="Es. rendilo più sintetico, aggiungi un esempio, cambia il destinatario…"
+                    />
+                  </label>
+                  <button
+                    className="primary"
+                    disabled={!!loading || !instruction.trim() || !draft.trim()}
+                    onClick={() => generate("refine")}
+                  >
+                    Crea una revisione
+                  </button>
                 </div>
-              )}
-              <p className="footnote">
-                Generato con {result.model}. Le revisioni usano il testo
-                presente nell’editor. Se cambi versione, le modifiche manuali
-                non salvate vengono sostituite.
-              </p>
-            </>
-          ) : (
-            <div className="empty-output">
-              <span>↗</span>
-              <h3>Le tue idee, ben organizzate.</h3>
-              <p>
-                Qui troverai un prompt con istruzioni, vincoli e formato adatti
-                al tuo obiettivo.
-              </p>
-              <div className="empty-tags">
-                <span>Obiettivo</span>
-                <span>Contesto</span>
-                <span>Istruzioni</span>
-                <span>Risultato atteso</span>
-              </div>
-            </div>
-          )}
-        </section>
+                {result.assumptions.length > 0 && (
+                  <div className="notes">
+                    <h3>Assunzioni da verificare</h3>
+                    <ul>
+                      {result.assumptions.map((item, index) => (
+                        <li key={index}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {result.checks.length > 0 && (
+                  <div className="notes">
+                    <h3>Criteri per valutare il risultato</h3>
+                    <p className="footnote">
+                      Suggeriti dall’AI; il prompt non è stato eseguito o
+                      validato.
+                    </p>
+                    <ul>
+                      {result.checks.map((item, index) => (
+                        <li key={index}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                <p className="footnote">
+                  Generato con {result.model}. Le revisioni usano il testo
+                  presente nell’editor. Se cambi versione, le modifiche manuali
+                  non salvate vengono sostituite.
+                </p>
+              </>
+            )}
+          </section>
+        )}
       </div>
       <div className="feedback" aria-live="polite">
         {loading && (
           <p>
             {" "}
-            {loading === "analyze"
-              ? "Analizzo il brief…"
+            {loading === "analyze" || loading === "start"
+              ? "Leggo la tua idea e scelgo come aiutarti…"
               : loading === "refine"
                 ? "Preparo la revisione…"
                 : "Costruisco il prompt…"}{" "}
@@ -545,7 +490,6 @@ export default function Home() {
       )}
       <section className="library" aria-labelledby="library-title">
         <div className="section-heading">
-          <span className="step">03</span>
           <div>
             <h2 id="library-title">La tua libreria</h2>
             <p>

@@ -6,13 +6,14 @@
 
 <p align="center">Dall’idea a un prompt chiaro, strutturato e riutilizzabile.</p>
 
-Prompt Builder è un’app in italiano per costruire istruzioni da usare con un’AI. Ti accompagna nella definizione dell’obiettivo, chiarisce le informazioni mancanti e permette di modificare e perfezionare il prompt attraverso revisioni successive.
+Prompt Builder è un’app in italiano per costruire istruzioni da usare con un’AI. Parti da un miniprompt di una o due frasi: l’AI sviluppa i dettagli, fa domande mirate solo quando servono e prepara un prompt completo. Puoi poi modificarlo e perfezionarlo attraverso revisioni successive.
 
 ## Cosa puoi fare
 
-- Creare prompt per scrittura, studio, ricerca, analisi, lavoro e pianificazione, oppure partire da un obiettivo libero.
-- Specificare contesto, destinatario, vincoli, formato e tono.
-- Chiedere chiarimenti all’AI prima di generare.
+- Descrivere brevemente qualsiasi esigenza in un’unica casella, senza compilare un modulo.
+- Ricevere direttamente un prompt completo quando l’idea è sufficientemente chiara.
+- Rispondere a un massimo di tre domande mirate quando servono informazioni importanti.
+- Ottenere istruzioni operative, struttura, formato e criteri di qualità sviluppati dall’AI.
 - Modificare il prompt in un editor Markdown e visualizzarne l’anteprima.
 - Richiedere revisioni che tengono conto del testo modificato manualmente.
 - Copiare, esportare in Markdown e salvare i progetti nella libreria locale.
@@ -66,22 +67,22 @@ Questo indirizzo è accessibile sulla rete locale; per condividere l’app via I
 
 ## Come si usa
 
-1. Scrivi l’obiettivo oppure scegli un punto di partenza.
-2. Completa i campi utili: contesto, destinatario, requisiti, formato e tono. Solo l’obiettivo è obbligatorio.
-3. Se vuoi, premi **Chiarisci con l’AI** e rispondi alle domande proposte.
-4. Premi **Costruisci prompt**. Le informazioni necessarie ma mancanti dovrebbero diventare segnaposto come `{{materia}}`; eventuali assunzioni sono mostrate separatamente.
-5. Modifica direttamente il testo oppure descrivi un miglioramento e premi **Crea una revisione**.
-6. Copia il prompt, esportalo in `.md` o premi **Salva in libreria**.
+1. Scrivi in poche parole cosa ti serve e premi **Invia la tua idea**. Per esempio: «Mi serve un prompt per preparare un piano di studio di storia in un mese».
+2. L’AI sceglie se generare subito oppure chiederti da uno a tre dettagli importanti. Non devi compilare campi per tono, destinatario e formato prima dell’invio.
+3. Se compaiono domande, rispondi liberamente e premi **Crea il prompt completo**. Puoi lasciare in bianco ciò che non sai: solo le informazioni indispensabili mancanti diventano segnaposto.
+4. Leggi il prompt nell’anteprima, copialo oppure passa a **Modifica** per intervenire sul testo.
+5. Per perfezionarlo, descrivi cosa cambiare e premi **Crea una revisione**.
+6. Esporta il prompt in `.md` o premi **Salva in libreria** per ritrovarlo nel browser.
 
 Il salvataggio è manuale e locale al browser: non c’è sincronizzazione tra PC e cellulare. Cancellando i dati del browser puoi perdere i progetti salvati. Il salvataggio conserva brief, versioni AI e testo corrente dell’editor; le risposte ai chiarimenti non sono archiviate separatamente.
 
-Se modifichi il brief, le precedenti domande e risposte vengono azzerate. Se selezioni un’altra versione, il testo nell’editor viene sostituito: salva o esporta prima le modifiche manuali che vuoi conservare.
+Se modifichi il miniprompt, le precedenti domande e risposte vengono azzerate. Se selezioni un’altra versione, il testo nell’editor viene sostituito: salva o esporta prima le modifiche manuali che vuoi conservare.
 
 ## Modello AI e consumi
 
 Il provider attuale è **Groq**; il modello predefinito è **GPT-OSS-120B** (`openai/gpt-oss-120b`). `GROQ_MODEL` permette di scegliere un altro modello Groq compatibile con JSON Object Mode. Il livello di ragionamento non è impostato esplicitamente nella richiesta attuale.
 
-Ogni richiesta di chiarimento, generazione o revisione effettua una chiamata al provider. Se condividi l’app con una chiave sul server, tutti gli utenti consumano la quota di quell’account Groq. Non sono presenti account utenti, quote individuali o modalità con chiavi personali.
+L’invio del miniprompt effettua una chiamata al provider, che risponde con domande oppure direttamente con il prompt. La generazione dopo le risposte e ogni revisione effettuano ciascuna un’ulteriore chiamata. Se condividi l’app con una chiave sul server, tutti gli utenti consumano la quota di quell’account Groq. Non sono presenti account utenti, quote individuali o modalità con chiavi personali.
 
 L’app invia a Groq il brief, le risposte ai chiarimenti e, per le revisioni, il prompt corrente con la modifica richiesta. Il builder non esegue ricerche web o codice.
 
@@ -101,7 +102,7 @@ npm run build
 npm run start -- --hostname 0.0.0.0
 ```
 
-I test verificano i contratti di input/output e la route API con un provider simulato: chiarimenti, generazione, revisione, input troppo lungo, configurazione assente, risposte incomplete e rate limit. Non misurano la qualità del modello né verificano l’accesso a un account reale.
+I test verificano i contratti di input/output e la route API con un provider simulato: miniprompt con domande oppure generazione diretta, chiarimenti, generazione, revisione, input troppo lungo, configurazione assente, risposte incomplete e rate limit. Non misurano la qualità del modello né verificano l’accesso a un account reale.
 
 Il server valida gli input e le risposte AI, applica un timeout di 45 secondi al provider e limita la richiesta a 6.000 token di output. L’annullamento dal browser interrompe l’attesa del client; una chiamata AI già partita può comunque consumare token.
 
