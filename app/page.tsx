@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import {
@@ -191,8 +192,15 @@ export default function Home() {
     <main className="workspace">
       <header className="topbar">
         <a href="/" className="brand">
-          <span className="brand-icon">✦</span> Prompt Builder{" "}
-          <span className="badge">DALL’IDEA AL PROMPT</span>
+          <Image
+            src="/logo.png"
+            alt="Logo Prompt Builder"
+            width={48}
+            height={48}
+            className="brand-logo"
+            priority
+          />{" "}
+          Prompt Builder <span className="badge">DALL’IDEA AL PROMPT</span>
         </a>
         <button disabled={!!loading} onClick={reset}>
           Nuovo progetto
@@ -268,9 +276,13 @@ export default function Home() {
             aria-labelledby="questions-title"
           >
             <div className="assistant-heading">
-              <span className="assistant-icon" aria-hidden="true">
-                ✦
-              </span>
+              <Image
+                src="/logo.png"
+                alt=""
+                width={42}
+                height={42}
+                className="assistant-logo"
+              />
               <div>
                 <h2 id="questions-title">Mi servono solo questi dettagli</h2>
                 <p>Rispondi come preferisci, anche in poche parole.</p>
@@ -320,9 +332,13 @@ export default function Home() {
             aria-labelledby="output-title"
           >
             <div className="section-heading">
-              <span className="assistant-icon" aria-hidden="true">
-                ✦
-              </span>
+              <Image
+                src="/logo.png"
+                alt=""
+                width={42}
+                height={42}
+                className="assistant-logo"
+              />
               <div>
                 <h2 id="output-title">Il tuo prompt</h2>
                 <p>

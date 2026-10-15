@@ -94,12 +94,11 @@ a {
   gap: 12px;
   font-weight: 700;
 }
-.brand-icon {
-  background: linear-gradient(135deg, #8b5cf6, #ec4899);
-  color: #ffffff;
-  padding: 6px 12px;
-  border-radius: 10px;
-  font-size: 23px;
+.brand-logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 .badge,
 .eyebrow {
@@ -601,14 +600,10 @@ textarea.mini-prompt:focus-visible {
   color: #aaaabd;
   line-height: 1.6;
 }
-.assistant-icon {
-  background: linear-gradient(135deg, #8b5cf6, #ec4899);
-  border-radius: 12px;
+.assistant-logo {
   width: 42px;
   height: 42px;
-  display: grid;
-  place-items: center;
-  font-size: 24px;
+  object-fit: contain;
   flex-shrink: 0;
 }
 .question-fields {

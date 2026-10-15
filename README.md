@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./app/icon.svg" width="88" height="88" alt="Logo Prompt Builder: stella bianca su sfondo viola e rosa" />
+  <img src="./public/logo.png" width="88" height="88" alt="Logo Prompt Builder: fumetto viola con stella rosa" />
 </p>
 
 <h1 align="center">Prompt Builder</h1>
@@ -110,7 +110,7 @@ Il server valida gli input e le risposte AI, applica un timeout di 45 secondi al
 
 Next.js 14, React 18, TypeScript, Tailwind CSS, Groq SDK, React Markdown e Vercel Web Analytics. Palette originale: viola `#8b5cf6`, rosa `#ec4899` e sfondo scuro `#0a0a10`.
 
-Il logo utilizzato nell’app e in questa pagina è disponibile in [app/icon.svg](./app/icon.svg); l’icona per dispositivi Apple è in [app/apple-icon.png](./app/apple-icon.png).
+Il logo utilizzato nell’app e in questa pagina è disponibile in [public/logo.png](./public/logo.png); l’icona per dispositivi Apple è in [app/apple-icon.png](./app/apple-icon.png).
 
 ## Prossimi sviluppi
 
